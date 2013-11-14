@@ -69,9 +69,12 @@ module.exports = {
 
     count_visible_paragraphs();
 
-    $(window.document).mousemove(function (e) {
+    $(window.document).scroll(_.throttle(function (e) {
       idle_time = 0;
-    });
+    }, 100));
+    $(window.document).mousemove(_.throttle(function (e) {
+      idle_time = 0;
+    }, 100));
     $(window.document).keypress(function (e) {
       idle_time = 0;
     });
