@@ -1,6 +1,4 @@
 {
-  "/": "about",
-  "/demo": "demo",
-  "/mars": "mars",
-  "/kitten": "kitten"
+  "/": "mars",
+  "/mars": "mars"
 }
