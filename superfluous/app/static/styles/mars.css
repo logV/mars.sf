@@ -1,3 +1,22 @@
-.contents {
-  margin: auto;
+#page_content {
+  p {
+    text-align: justify;
+  }
+
+  .contents {
+    margin: auto;
+    max-width: 600px;
+    @media (max-width: 767px) {
+      margin-left: -20px;
+    }
+    @media (max-width: 767px) {
+      margin-left: -20px;
+    }
+
+  }
+}
+
+#page_content .container-fluid {
+  padding-left: 30px;
+  padding-right: 0px;
 }

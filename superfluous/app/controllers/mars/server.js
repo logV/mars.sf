@@ -15,6 +15,8 @@ module.exports = {
   },
 
   index: function() {
+    template.add_stylesheet("mars.css");
+
     fs.readdir(MARS_PATH, function(err, files) {
       files = _.filter(files, function(filename) {
         var end = filename.substr(-3);
