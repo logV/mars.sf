@@ -1,0 +1,7 @@
+{
+  "main" : "paragraph_tracker",
+  "helpers": [ "vendor/viewport" ],
+  "style": "paragraph_tracker.css",
+  "styles": [],
+  "template": "paragraph_tracker.html.erb"
+}

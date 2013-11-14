@@ -1,6 +1,8 @@
 #page_content {
   p {
     text-align: justify;
+    margin-bottom: 20px;
+    line-height: 140%;
   }
 
   .contents {
@@ -19,4 +21,15 @@
 #page_content .container-fluid {
   padding-left: 30px;
   padding-right: 0px;
+}
+
+#page_content {
+  p .counter {
+    opacity: 0.0;
+    left: 5px;
+    @media (max-width: 767px) {
+      left: inherit;
+      right: 5px;
+    }
+  }
 }

@@ -42,6 +42,8 @@ module.exports = {
 
     template.add_stylesheet("mars.css");
 
+    $C("paragraph_tracker", {}).marshall();
+
 
     fs.readFile(MARS_PATH + filename, function(err, data) {
       if (!err) {
