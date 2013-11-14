@@ -10,6 +10,7 @@ globals.install();
 
 var config = require_core("server/config");
 
+var package_json = require_core("../package.json");
 
 // setup() fills these in
 var socket,
@@ -18,6 +19,9 @@ var socket,
 
 
 function setup() {
+  // Better stack traces
+  require("longjohn");
+
   if (config.behind_proxy) {
     app.enable('trust proxy');
   }
@@ -31,9 +35,6 @@ function setup() {
   https_server = auth.setup_ssl_server(app);
 
   http.globalAgent.maxSockets = config.max_http_sockets;
-
-  // Better stack traces
-  require("longjohn");
 
   // Add timestamps
   require("./console").install();

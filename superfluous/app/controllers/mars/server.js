@@ -27,7 +27,7 @@ module.exports = {
         var template_str = template.render("controllers/mars.html.erb", {
           files: files
         });
-        page.render({ content: template_str });
+        page.render({ content: template_str, socket: true });
       } else {
         page.render( { content: "Couldnt read files from mars directory, make"
         + "sure to initialize git submodules" });
@@ -51,7 +51,7 @@ module.exports = {
         var template_str = template.partial("mars/chapter.html.erb", {
           rendered: rendered
         });
-        page.render({ content: template_str });
+        page.render({ content: template_str, socket: true });
       } else {
         page.render({ content: "Error reading file: " + filename });
       }
