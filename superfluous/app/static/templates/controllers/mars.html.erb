@@ -1,11 +1,13 @@
 <% set_default(files, []) %>
 
-<h1>Here's a list of chapters from the mars project</h1>
+<div class="container">
+  <h1>nobody can hear you read in space...</h1>
 
-<ul>
-  <% _.each(files, function(filename) { %>
-    <li>
-      <a href="mars/read?f=<%= filename %>"><%= filename %></a>
-    </li>
-  <% }) %>
-</ul>
+  <ul class="nav nav-pills nav-stacked">
+    <% _.each(files, function(filename) { %>
+      <li class="">
+        <a href="mars/read?f=<%= filename %>"><%= filename %></a>
+      </li>
+    <% }) %>
+  </ul>
+</div>
