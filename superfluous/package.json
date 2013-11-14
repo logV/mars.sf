@@ -2,7 +2,7 @@
   "name": "superfluous",
     "description": "a node.js server/client understanding",
     "version": "0.0.1",
-    "private": true,
+    "private": "true",
     "dependencies": {
       "express": "3.x",
       "socket.io": "0.9.x",
@@ -13,10 +13,11 @@
       "mongodb" : "x",
       "connect-mongo" : "x",
       "longjohn" : "x",
+      "htpasswd" : "x",
       "Faker" : "x",
       "async" : "x",
       "less" : "x",
-      "highlight.js"
+      "highlight.js" : "x"
     }
 }
 

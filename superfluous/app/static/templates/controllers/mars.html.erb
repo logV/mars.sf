@@ -1,0 +1,11 @@
+<% set_default(files, []) %>
+
+<h1>Here's a list of chapters from the mars project</h1>
+
+<ul>
+  <% _.each(files, function(filename) { %>
+    <li>
+      <a href="mars/read?f=<%= filename %>"><%= filename %></a>
+    </li>
+  <% }) %>
+</ul>
