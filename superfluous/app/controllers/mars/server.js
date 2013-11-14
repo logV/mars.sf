@@ -16,6 +16,11 @@ module.exports = {
 
   index: function() {
     fs.readdir(MARS_PATH, function(err, files) {
+      files = _.filter(files, function(filename) {
+        var end = filename.substr(-3);
+        return end === ".md";
+      });
+
       if (!err) {
         var template_str = template.render("controllers/mars.html.erb", {
           files: files
