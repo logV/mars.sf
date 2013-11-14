@@ -11,6 +11,7 @@ globals.install();
 var config = require_core("server/config");
 
 var package_json = require_core("../package.json");
+var app_name = package_json.name;
 
 // setup() fills these in
 var socket,
@@ -102,6 +103,7 @@ function try_restart(server, port) {
   };
 }
 module.exports = {
+  name: app_name,
   run: function() {
     var services = { web_server: true };
     if (!config.separate_services) { services.collector = true; }

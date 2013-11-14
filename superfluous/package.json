@@ -17,7 +17,7 @@
       "Faker" : "x",
       "async" : "x",
       "less" : "x",
-      "highlight.js" : "x"
+      "orm" : "x"
     }
 }
 

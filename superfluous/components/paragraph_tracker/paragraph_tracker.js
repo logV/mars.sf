@@ -6,10 +6,11 @@ module.exports = {
   defaults: {
     content: "default content"
   },
-  client: function() {
+  client: function(options) {
     // Detect when the user becomes idle vs. is active. Watch for scrolling, etc
-
     var paragraphs = $("p").length;
+    var pagename = options.client_options.page;
+    var pageid = options.client_options.pageid;
     $("p").prepend(
       $("<div class='counter'>")
         .css("position", "absolute")
@@ -32,6 +33,15 @@ module.exports = {
 
       session.ticks = current_tick;
       session.active = session.ticks - session.idle;
+
+      if (current_tick % 5 === 0) {
+        var socket_data = {
+          data: session,
+          page: pagename,
+          pageid: pageid
+        };
+        SF.socket().emit("timespent", socket_data);
+      }
 
       // don't count the time if the user has been idle
       if (idle_time < 30) {

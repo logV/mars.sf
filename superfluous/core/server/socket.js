@@ -124,6 +124,7 @@ module.exports = {
           if (controller.socket) {
             controller.socket(socket);
           }
+          socket.handshake.controller = name;
 
           _sockets.push(socket);
 
