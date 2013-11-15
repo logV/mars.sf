@@ -84,6 +84,7 @@ module.exports = {
 
     template.add_stylesheet("mars.css");
 
+    $C("paragraph_comment_helper", {}).marshall();
     $C("paragraph_tracker", {client_options: { page: filename, pageid: +Date.now()}}).marshall();
 
     var render_chapter_links = function() {

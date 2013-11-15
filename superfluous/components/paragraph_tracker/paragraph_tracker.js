@@ -12,16 +12,15 @@ module.exports = {
     var num_paragraphs = paragraphs.length;
     var pagename = options.client_options.page;
     var pageid = options.client_options.pageid;
-    $("p").prepend(
-      $("<div class='counter'>")
-        .css("position", "absolute")
-    );
     var session = {};
     session.count = num_paragraphs;
     session.idle = 0;
 
     var idle_time = 0;
     var current_tick = 0;
+
+    var color_picker = this.helpers['vendor/jquery.colors'].get_color;
+    var color = color_picker(options.client_options.sid || Math.abs(Math.random()));
 
     // Poll the page every second and keep track of which paragraphs are visible
     function count_visible_paragraphs() {
@@ -63,8 +62,6 @@ module.exports = {
           var opacity = Math.round(session[index] / parseFloat(session.active) * 100.0) / 100;
 
           $p.find(".counter")
-            .html("<div style='width: 10px; height: 20px' />")
-            .css("background-color", "#3b7")
             .css("opacity", opacity);
         });
       } else {

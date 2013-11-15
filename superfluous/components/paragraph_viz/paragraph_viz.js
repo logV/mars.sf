@@ -16,7 +16,6 @@ module.exports = {
     var cell_count;
     var cells = $("<div/>");
     var index;
-    console.log(this);
     var helpers = this.helpers;
     var color_picker = this.helpers['vendor/jquery.colors'].get_color;
 

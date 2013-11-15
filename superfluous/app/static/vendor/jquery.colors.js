@@ -139,8 +139,7 @@ var COLOR_IDS = {};
 
 module.exports = {
   get_color: function(id) {
-    id = id.toString().hashCode() % COLOR_VALUES.length;
-    console.log(id);
+    id = Math.abs(id.toString().hashCode() % COLOR_VALUES.length);
     var color = COLOR_IDS[id] || COLOR_VALUES[id];
     COLOR_IDS[id] = color;
 
