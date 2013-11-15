@@ -8,7 +8,8 @@ module.exports = {
   },
   client: function(options) {
     // Detect when the user becomes idle vs. is active. Watch for scrolling, etc
-    var paragraphs = $("p").length;
+    var paragraphs = $("p");
+    var num_paragraphs = paragraphs.length;
     var pagename = options.client_options.page;
     var pageid = options.client_options.pageid;
     $("p").prepend(
@@ -16,7 +17,7 @@ module.exports = {
         .css("position", "absolute")
     );
     var session = {};
-    session.count = paragraphs;
+    session.count = num_paragraphs;
     session.idle = 0;
 
     var idle_time = 0;
@@ -36,7 +37,7 @@ module.exports = {
 
       if (current_tick % 5 === 0) {
         var socket_data = {
-          data: session,
+          session: session,
           page: pagename,
           pageid: pageid
         };
@@ -48,7 +49,7 @@ module.exports = {
         var vis_paragraphs = $("p").filter(function() { return $(this).isOnScreen(); });
         _.each(vis_paragraphs, function(p) {
           var $p = $(p);
-          var index = $p.index();
+          var index = paragraphs.index($p);
           // locate where in the text these words are. right?
           session[index] = (session[index]||0) + 1;
 
@@ -56,7 +57,7 @@ module.exports = {
 
         _.each($("p"), function(p) {
           var $p = $(p);
-          var index = $p.index();
+          var index = paragraphs.index($p);
 
           // We should set this color to represent the number of seconds spent on this paragraph.
           var opacity = Math.round(session[index] / parseFloat(session.active) * 100.0) / 100;

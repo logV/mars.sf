@@ -12,7 +12,8 @@ var MARS_PATH = "app/mars/tharsis prime/";
 module.exports = {
   routes: {
     "" : "index",
-    "/read" : "get_read"
+    "/read" : "get_read",
+    "/watch" : "get_watch"
   },
 
   index: function() {
@@ -36,6 +37,20 @@ module.exports = {
     });
   },
 
+  get_watch: function() {
+    var filename = context("req").query.f;
+    models.timespent.find({page: filename}, context.wrap(function(err, results) {
+      if (!err) {
+        var template_str = template.partial("mars/watch.html.erb", {
+          results: results
+        });
+        page.render({ content: template_str, socket: true });
+      } else {
+        page.render({ content: "Couldn't find any results" });
+      }
+
+    }));
+  },
   get_read: function() {
     // TODO: make sure filename is only a basepath
     // ../../../etc/passwd
