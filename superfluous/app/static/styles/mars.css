@@ -33,3 +33,11 @@
     }
   }
 }
+
+#page_content .viz_separator {
+   margin-top: -10px;
+   background-color: black;
+   display: block;
+   height: 10px;
+   width: 10px
+}

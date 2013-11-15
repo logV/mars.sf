@@ -38,6 +38,7 @@ module.exports = {
   },
 
   get_watch: function() {
+    template.add_stylesheet("mars.css");
     var filename = context("req").query.f;
     models.timespent.find({page: filename}, context.wrap(function(err, results) {
       if (!err) {
