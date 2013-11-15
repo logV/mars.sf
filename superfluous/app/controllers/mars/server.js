@@ -12,6 +12,8 @@ var fs = require("fs");
 var MARS_PATH = "app/mars/tharsis prime/";
 
 var MARS_FILES = null;
+var value_of = require_core("server/controller").value_of;
+var array_of = require_core("server/controller").array_of;
 
 function load_mars_files(cb) {
   fs.readdir(MARS_PATH, function(err, files) {
@@ -30,11 +32,48 @@ function error_reading_chapters() {
   + "sure to initialize git submodules" });
 }
 
+function render_chapter_links(filename) {
+  return page.async(function(flush) {
+    function render_links() {
+      var index =_.indexOf(MARS_FILES, filename);
+      var links = $("<div />");
+
+      if (index > 0) {
+        links.append($("<a class='lfloat'/>").html("PREV").attr("href", "/mars/read?f=" + MARS_FILES[index-1]));
+      }
+
+      if (index < MARS_FILES.length - 1) {
+        links.append($("<a class='rfloat'/>").html("NEXT").attr("href", "/mars/read?f=" + MARS_FILES[index+1]));
+      } else {
+        links.append($("<div class='rfloat'>END</div>"));
+      }
+
+      return links.html();
+    }
+
+    if (MARS_FILES) {
+      flush(render_links());
+      return;
+    }
+
+
+    load_mars_files(function() {
+      if (MARS_FILES) {
+        flush(render_links());
+      } else {
+        flush("");
+      }
+
+    });
+  })();
+}
+
 module.exports = {
   routes: {
     "" : "index",
     "/read" : "get_read",
-    "/watch" : "get_watch"
+    "/watch" : "get_watch",
+    "/comments" : "get_comments"
   },
 
   index: function() {
@@ -61,6 +100,19 @@ module.exports = {
     });
   },
 
+  get_comments: function() {
+    template.add_stylesheet("mars.css");
+    var filename = context("req").query.f;
+    models.comment.find({ 
+      page: filename
+      
+    }, context.wrap(function(err, results) {
+      console.log(err, results);
+      page.render({content: JSON.stringify(results) });
+
+    }));
+  },
+
   get_watch: function() {
     template.add_stylesheet("mars.css");
     var filename = context("req").query.f;
@@ -84,51 +136,16 @@ module.exports = {
 
     template.add_stylesheet("mars.css");
 
-    $C("paragraph_comment_helper", {}).marshall();
-    $C("paragraph_tracker", {client_options: { page: filename, pageid: +Date.now()}}).marshall();
-
-    var render_chapter_links = function() {
-      return page.async(function(flush) {
-        function render_links() {
-          var index =_.indexOf(MARS_FILES, filename);
-          var links = $("<div />");
-
-          if (index > 0) {
-            links.append($("<a class='lfloat'/>").html("PREV").attr("href", "/mars/read?f=" + MARS_FILES[index-1]));
-          }
-
-          if (index < MARS_FILES.length - 1) {
-            links.append($("<a class='rfloat'/>").html("NEXT").attr("href", "/mars/read?f=" + MARS_FILES[index+1]));
-          } else {
-            links.append($("<div class='rfloat'>END</div>"));
-          }
-
-          return links.html();
-        }
-
-        if (MARS_FILES) {
-          flush(render_links());
-          return;
-        }
-
-
-        load_mars_files(function() {
-          if (MARS_FILES) {
-            flush(render_links()); 
-          } else {
-            flush("");
-          }
-
-        });
-      })();
-    };
+    var client_options = {client_options: { page: filename, pageid: +Date.now()}};
+    $C("paragraph_comment_helper", client_options).marshall();
+    $C("paragraph_tracker", client_options).marshall();
 
     fs.readFile(MARS_PATH + filename, function(err, data) {
       if (!err) {
         var rendered = marked(data.toString());
         var template_str = template.partial("mars/chapter.html.erb", {
           rendered: rendered,
-          render_chapter_links: render_chapter_links
+          render_chapter_links: function() { return render_chapter_links(filename); }
         });
         page.render({ content: template_str, socket: true });
       } else {
@@ -138,6 +155,29 @@ module.exports = {
   },
 
   socket: function(socket) {
+    socket.on("add_comment", function(data) {
+
+      var comment_data = {
+        comment: value_of(data, "comment"),
+        author: value_of(data, "author", ""),
+        page: value_of(data, "page"),
+        index: value_of(data, "index"),
+        pageid: value_of(data, "pageid"),
+        time: Date.now()
+      };
+
+
+      if (!_.isNumber(comment_data.index) || !comment_data.page) {
+        console.log("Missing comment data information");
+      } else {
+        console.log("Adding comment", comment_data);
+
+        models.comment.create([comment_data], function(err, result) { 
+          socket.emit("comment_added"); 
+        });
+      }
+    });
+
     socket.on("timespent", function(data) {
       models.timespent.find({
         sid: socket.handshake.sid, page: data.page, pageid: data.pageid
@@ -159,17 +199,6 @@ module.exports = {
           result.save();
         }
 
-      });
-    });
-
-    socket.on("comment", function(data) {
-      console.log("RECEIVED COMMENT DATA", data);
-      // TODO: do this
-    });
-
-    socket.on("get_timespent", function(data) {
-      models.timespent.find({}, function(err, timespent) {
-        socket.emit("timespent", timespent);
       });
     });
   }

@@ -3,18 +3,24 @@
     text-align: justify;
     margin-bottom: 20px;
     line-height: 140%;
+    padding-right: 30px;
+    position: relative;
+
+    .counter {
+      display: none;
+
+      right: 20px;
+      @media (max-width: 767px) {
+        left: inherit;
+        right: 20px;
+        display: block;
+      }
+    }
   }
 
   .contents {
     margin: auto;
     max-width: 600px;
-    @media (max-width: 767px) {
-      margin-left: -20px;
-    }
-    @media (max-width: 767px) {
-      margin-left: -20px;
-    }
-
   }
 }
 
@@ -23,25 +29,10 @@
   padding-right: 0px;
 }
 
-#page_content {
-  p .counter {
-    opacity: 0.0;
-    left: 5px;
-    @media (max-width: 767px) {
-      left: inherit;
-      right: 5px;
-    }
-  }
-}
-
 #page_content .viz_separator {
    margin-top: -10px;
    background-color: black;
    display: block;
    height: 10px;
    width: 10px
-}
-
-#page_content p .counter {
-  display: none;
 }

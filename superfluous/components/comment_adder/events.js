@@ -6,10 +6,17 @@ module.exports = {
   // the main component file, since it has code
   // that is generally not relevant to the server.
   events: {
-    "click" :  "handle_template_click"
+    "submit" :  "handle_add_comment"
   },
 
-  handle_template_click: function() {
-    console.log(this.id, "clicked");
+  handle_add_comment: function(e) {
+    var form = this.$el.find("form");
+    var serialized = form.serializeArray();
+    serialized.push({ "name" : "page", "value" : this.page });
+    serialized.push({ "name" : "pageid", "value" : this.pageid });
+    serialized.push({ "name" : "index", "value" : this.paragraph_index });
+    SF.controller().trigger("add_comment", serialized);
+    e.preventDefault();
+    this.close();
   }
 };

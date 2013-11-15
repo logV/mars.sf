@@ -15,10 +15,11 @@ module.exports = {
         define: function (db, models, next) {
             models.comment = db.define("comment", {
               author: String,
-              text: String,
+              comment: String,
               time: Number,
-              paragraph: Number,
-              paragraph_words: Object
+              index: Number,
+              pageid: String,
+              page: String
             });
 
             models.timespent = db.define("timespent", {

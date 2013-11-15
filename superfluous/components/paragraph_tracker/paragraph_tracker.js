@@ -51,18 +51,6 @@ module.exports = {
           var index = paragraphs.index($p);
           // locate where in the text these words are. right?
           session[index] = (session[index]||0) + 1;
-
-        });
-
-        _.each($("p"), function(p) {
-          var $p = $(p);
-          var index = paragraphs.index($p);
-
-          // We should set this color to represent the number of seconds spent on this paragraph.
-          var opacity = Math.round(session[index] / parseFloat(session.active) * 100.0) / 100;
-
-          $p.find(".counter")
-            .css("opacity", opacity);
         });
       } else {
         session.idle += 1;
