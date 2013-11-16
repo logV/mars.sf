@@ -10,6 +10,8 @@ module.exports = {
     this.paragraph_index = options.index;
     this.page = options.page;
     this.pageid = options.pageid;
+
+    this.paragraph_start = options.paragraph.substr(0, 100);
   },
   client: function(options) {
     var client_options = options.client_options;

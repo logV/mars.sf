@@ -15,6 +15,7 @@ module.exports = {
     serialized.push({ "name" : "page", "value" : this.page });
     serialized.push({ "name" : "pageid", "value" : this.pageid });
     serialized.push({ "name" : "index", "value" : this.paragraph_index });
+    serialized.push({ "name" : "paragraph", "value" : this.paragraph_start });
     SF.controller().trigger("add_comment", serialized);
     e.preventDefault();
     this.close();

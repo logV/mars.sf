@@ -1,6 +1,7 @@
 'use strict';
 
 var page = require_core("server/page");
+var bridge = require_core("server/bridge");
 var template = require_core("server/template");
 var context = require_core("server/context");
 var marked = require("marked");
@@ -27,23 +28,51 @@ function load_mars_files(cb) {
   });
 }
 
+function render_chapter_listing() {
+    var template_str = template.render("controllers/mars.html.erb", {
+      files: MARS_FILES
+    });
+    page.render({ content: template_str, socket: true });
+}
+
 function error_reading_chapters() {
   page.render( { content: "Couldnt read files from mars directory, make"
   + "sure to initialize git submodules" });
 }
 
-function render_chapter_links(filename) {
+function render_chapter(filename, comments) {
+  template.add_stylesheet("mars.css");
+
+  fs.readFile(MARS_PATH + filename, function(err, data) {
+    if (!err) {
+      var rendered = marked(data.toString());
+      var template_str = template.partial("mars/chapter.html.erb", {
+        rendered: rendered,
+        render_chapter_links: function() { return render_chapter_links(filename, comments); }
+      });
+      page.render({ content: template_str, socket: true });
+    } else {
+      page.render({ content: "Error reading file: " + filename });
+    }
+  });
+}
+function render_chapter_links(filename, comments) {
   return page.async(function(flush) {
     function render_links() {
       var index =_.indexOf(MARS_FILES, filename);
       var links = $("<div />");
 
+      var url = "/mars/read?f=";
+      if (comments) { 
+        url = "/mars/comments?f=";
+      }
+
       if (index > 0) {
-        links.append($("<a class='lfloat'/>").html("PREV").attr("href", "/mars/read?f=" + MARS_FILES[index-1]));
+        links.append($("<a class='lfloat'/>").html("PREV").attr("href", url + MARS_FILES[index-1]));
       }
 
       if (index < MARS_FILES.length - 1) {
-        links.append($("<a class='rfloat'/>").html("NEXT").attr("href", "/mars/read?f=" + MARS_FILES[index+1]));
+        links.append($("<a class='rfloat'/>").html("NEXT").attr("href", url + MARS_FILES[index+1]));
       } else {
         links.append($("<div class='rfloat'>END</div>"));
       }
@@ -70,21 +99,14 @@ function render_chapter_links(filename) {
 
 module.exports = {
   routes: {
-    "" : "index",
+    "" : "get_index",
     "/read" : "get_read",
     "/watch" : "get_watch",
     "/comments" : "get_comments"
   },
 
-  index: function() {
+  get_index: function() {
     template.add_stylesheet("mars.css");
-
-    function render_chapter_listing() {
-        var template_str = template.render("controllers/mars.html.erb", {
-          files: MARS_FILES
-        });
-        page.render({ content: template_str, socket: true });
-    }
 
     if (MARS_FILES) {
       render_chapter_listing();
@@ -103,6 +125,7 @@ module.exports = {
   get_comments: function() {
     template.add_stylesheet("mars.css");
     var filename = context("req").query.f;
+
     models.comment.find({ 
       page: filename
     }, context.wrap(function(err, results) {
@@ -113,7 +136,9 @@ module.exports = {
 
         cmp.marshall();
       });
-      page.render({content: el.html() });
+
+      bridge.controller("mars", "add_comments", results);
+      render_chapter(filename, true);
     }));
   },
 
@@ -137,25 +162,11 @@ module.exports = {
     // TODO: make sure filename is only a basepath
     // ../../../etc/passwd
     var filename = context("req").query.f;
-
-    template.add_stylesheet("mars.css");
-
     var client_options = {client_options: { page: filename, pageid: +Date.now()}};
     $C("paragraph_comment_helper", client_options).marshall();
     $C("paragraph_tracker", client_options).marshall();
 
-    fs.readFile(MARS_PATH + filename, function(err, data) {
-      if (!err) {
-        var rendered = marked(data.toString());
-        var template_str = template.partial("mars/chapter.html.erb", {
-          rendered: rendered,
-          render_chapter_links: function() { return render_chapter_links(filename); }
-        });
-        page.render({ content: template_str, socket: true });
-      } else {
-        page.render({ content: "Error reading file: " + filename });
-      }
-    });
+    render_chapter(filename);
   },
 
   socket: function(socket) {
@@ -167,6 +178,7 @@ module.exports = {
         page: value_of(data, "page"),
         index: value_of(data, "index"),
         pageid: value_of(data, "pageid"),
+        paragraph: value_of(data, "paragraph"),
         time: Date.now(),
         public: false,
         sid: socket.handshake.sid

@@ -16,6 +16,7 @@ module.exports = {
             models.comment = db.define("comment", {
               author: String,
               comment: String,
+              paragraph: String,
               public: Boolean,
               sid: String,
               time: Number,

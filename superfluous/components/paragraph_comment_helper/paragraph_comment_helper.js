@@ -61,7 +61,7 @@ module.exports = {
       _added[index] = true;
       p.find(".comment_toggle").html("-");
 
-      $C("comment_adder", { index: index, page: page, pageid: pageid }, function(cmp) {
+      $C("comment_adder", { paragraph: p.text().substr(1), index: index, page: page, pageid: pageid }, function(cmp) {
         cmp.$el.hide();
         p.append(cmp.$el);
         cmp.$el.slideDown();
