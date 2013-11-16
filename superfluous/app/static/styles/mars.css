@@ -41,7 +41,7 @@
       @media (max-width: 767px) {
         left: -30px;
         right: inherit;
-        display: block;
+        display: block !important;
       }
     }
   }
