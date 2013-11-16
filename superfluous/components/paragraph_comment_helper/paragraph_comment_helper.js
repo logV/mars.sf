@@ -16,16 +16,21 @@ module.exports = {
     var counter = $("<div class='counter'>")
       .css("position", "absolute")
       .css({
-        "width" : "10px",
-        "height" : "20px"
+        "width" : "25px",
+        "height" : "25px"
       });
 
 
     var toggler = $("<div class='comment_toggle pam' />")
         .css({
         "cursor" : "pointer",
-        "font-size" : "32px",
-        "margin-top" : "-5px"
+        "background-color" : "#111",
+        "line-height" : "10px",
+        "text-align" : "center",
+        "border" : "2px dotted white",
+        "color": "#fff",
+        "width" : "10px",
+        "height" : "10px"
       });
     toggler.html("+");
 
@@ -54,7 +59,7 @@ module.exports = {
       }
 
       _added[index] = true;
-      p.find(".comment_toggle").html("&#x2012;");
+      p.find(".comment_toggle").html("-");
 
       $C("comment_adder", { index: index, page: page, pageid: pageid }, function(cmp) {
         cmp.$el.hide();

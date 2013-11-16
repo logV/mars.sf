@@ -105,11 +105,15 @@ module.exports = {
     var filename = context("req").query.f;
     models.comment.find({ 
       page: filename
-      
     }, context.wrap(function(err, results) {
-      console.log(err, results);
-      page.render({content: JSON.stringify(results) });
+      var el = $("<div />");
+      _.each(results, function(comment) {
+        var cmp = $C("admin_comment", comment);
+        el.append(cmp.$el);
 
+        cmp.marshall();
+      });
+      page.render({content: el.html() });
     }));
   },
 
@@ -163,7 +167,9 @@ module.exports = {
         page: value_of(data, "page"),
         index: value_of(data, "index"),
         pageid: value_of(data, "pageid"),
-        time: Date.now()
+        time: Date.now(),
+        public: false,
+        sid: socket.handshake.sid
       };
 
 
@@ -176,6 +182,18 @@ module.exports = {
           socket.emit("comment_added"); 
         });
       }
+    });
+
+    // TODO: need to actually trust the incoming data
+    socket.on("promote_comment", function(comment) {
+      models.comment.find({ _id: comment._id}, function(err, results) {
+        if (results.length) {
+          var comment = results.pop();
+          comment.public = true;
+          comment.save();
+        }
+
+      });
     });
 
     socket.on("timespent", function(data) {
