@@ -102,7 +102,8 @@ module.exports = {
     "" : "get_index",
     "/read" : "get_read",
     "/watch" : "get_watch",
-    "/comments" : "get_comments"
+    "/comments" : "get_comments",
+    "/admin" : "get_admin"
   },
 
   get_index: function() {
@@ -119,6 +120,15 @@ module.exports = {
       } else {
         error_reading_chapters();
       }
+    });
+  },
+
+  get_admin: function() {
+    load_mars_files(function() {
+      var template_str = template.partial("mars/admin.html.erb", { 
+        files: MARS_FILES
+      });
+      page.render({ content: template_str, socket: true });
     });
   },
 
