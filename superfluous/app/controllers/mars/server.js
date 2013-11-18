@@ -17,6 +17,7 @@ var value_of = require_core("server/controller").value_of;
 var array_of = require_core("server/controller").array_of;
 
 function load_mars_files(cb) {
+  cb = context.wrap(cb);
   fs.readdir(MARS_PATH, function(err, files) {
     if (!err) {
       MARS_FILES = _.filter(files, function(filename) {
@@ -125,10 +126,18 @@ module.exports = {
 
   get_admin: function() {
     load_mars_files(function() {
-      var template_str = template.partial("mars/admin.html.erb", { 
-        files: MARS_FILES
-      });
-      page.render({ content: template_str, socket: true });
+      // Load all the comments from the db
+      models.comment.find({}, context.wrap(function(err, results) {
+        var comments = _.toArray(results);
+        var grouped_comments = _.groupBy(results, function(r) { return r.page; });
+        var template_str = template.partial("mars/admin.html.erb", { 
+          files: MARS_FILES,
+          grouped_comments: grouped_comments,
+          comments: comments
+        });
+        page.render({ content: template_str, socket: true });
+      
+      }));
     });
   },
 
