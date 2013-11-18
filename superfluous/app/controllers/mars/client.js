@@ -1,14 +1,11 @@
 "use strict";
 
 module.exports = {
-  click_handler_uno: function() {
-    console.log("Handling a click");
-  },
-
   init: function() {
-    this.on("add_comment", function(data) {
-      console.log("ADDING THIS COMMENT BUSINESS", data);
-      SF.socket().emit("add_comment", data);
+    this.on("add_comment", function(data, cmp) {
+      SF.socket().emit("add_comment", data, function() {
+        cmp.saved();
+      });
     });
   },
   add_comments: function(comments) {
@@ -38,9 +35,14 @@ module.exports = {
 
       var text = $("<div class='alert mtl' />");
       text.append("<h4>Comment from <b>" + (comment.author || "anon") + "</b></h4>");
-      text.append(comment.comment);
+      var date = new Date(comment.time);
+      var date_str = date.toLocaleString();
 
-      console.log(first_words, p);
+
+      text.append("<div><small>" + date_str + "</small></div>");
+      text.append("<br />");
+      text.append($("<p>").text(comment.comment));
+
       if (p) {
         // Add this comment to the end of the paragraph
         p.append(text);

@@ -189,7 +189,7 @@ module.exports = {
   },
 
   socket: function(socket) {
-    socket.on("add_comment", function(data) {
+    socket.on("add_comment", function(data, cb) {
 
       var comment_data = {
         comment: value_of(data, "comment"),
@@ -199,7 +199,7 @@ module.exports = {
         pageid: value_of(data, "pageid"),
         paragraph: value_of(data, "paragraph"),
         time: Date.now(),
-        public: false,
+        "public": false, // lint!
         sid: socket.handshake.sid
       };
 
@@ -210,7 +210,7 @@ module.exports = {
         console.log("Adding comment", comment_data);
 
         models.comment.create([comment_data], function(err, result) { 
-          socket.emit("comment_added"); 
+          cb("comment_added"); 
         });
       }
     });
