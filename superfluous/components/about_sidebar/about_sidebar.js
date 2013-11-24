@@ -46,5 +46,11 @@ module.exports = {
     this.$el.find(".toc").empty();
     this.$el.find(".toc").append("Generating contents...");
 
+  },
+  rivets: function() {
+    console.log("RIVETS");
+    return {
+      data: 'test'
+    }
   }
 };

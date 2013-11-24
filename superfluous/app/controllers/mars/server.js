@@ -24,6 +24,7 @@ function load_mars_files(cb) {
         var end = filename.substr(-3);
         return end === ".md";
       });
+      MARS_FILES.sort();
     }
     cb();
   });

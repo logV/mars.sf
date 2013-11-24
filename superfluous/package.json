@@ -15,6 +15,7 @@
       "longjohn" : "x",
       "htpasswd" : "x",
       "Faker" : "x",
+      "json-stable-stringify" : "x",
       "async" : "x",
       "less" : "x",
       "orm" : "x"
