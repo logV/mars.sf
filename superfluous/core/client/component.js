@@ -156,6 +156,9 @@ function build(component, options, cb) {
         render_component(cmpInstance);
 
         cmpInstance.helpers = {};
+        if (!cmpInstance.events) { 
+          cmpInstance.events = {};
+        }
         _.each(_packages[component].helpers, function(helper, name) {
 
           if (CmpClass.helpers[name]) {
