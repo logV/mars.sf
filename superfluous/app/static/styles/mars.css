@@ -49,6 +49,11 @@
   .contents {
     margin: auto;
     max-width: 600px;
+    @media (min-width: 767px) {
+      right: 0;
+      left: 0;
+      position: absolute;
+    }
   }
 }
 
