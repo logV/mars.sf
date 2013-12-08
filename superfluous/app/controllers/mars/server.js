@@ -201,7 +201,7 @@ module.exports = {
         paragraph: value_of(data, "paragraph"),
         time: Date.now(),
         "public": false, // lint!
-        sid: socket.handshake.sid
+        sid: socket.sid
       };
 
 
@@ -230,16 +230,16 @@ module.exports = {
 
     socket.on("timespent", function(data) {
       models.timespent.find({
-        sid: socket.handshake.sid, page: data.page, pageid: data.pageid
+        sid: socket.sid, page: data.page, pageid: data.pageid
       }, 1, function(err, results) {
         if (err || !results.length) {
           // Create the first time, drop the rest
           models.timespent.create([{
-            sid: socket.handshake.sid,
+            sid: socket.sid,
             data: data,
             page: data.page,
             pageid: data.pageid,
-            controller: socket.handshake.controller
+            controller: socket.controller
           }], function() { });
         } else {
           var result = results.pop();
