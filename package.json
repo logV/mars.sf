@@ -1,0 +1,16 @@
+{
+  "name": "blag.sf",
+  "description": "another superfluous app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "superfluous": "",
+    "marked": "x",
+    "orm": "x",
+    "cheerio": "x"
+  },
+  "scripts": {
+    "test": "bash scripts/run_tests.sh",
+    "start": "node app.js"
+  }
+}
