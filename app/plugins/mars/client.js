@@ -2,7 +2,6 @@
 
 module.exports = {
   init: function() {
-    console.log("INIT MARS");
     this.on("add_comment", function(data, cmp) {
       SF.socket().emit("add_comment", data, function() {
         cmp.saved();
@@ -11,9 +10,6 @@ module.exports = {
   },
   add_comments: function(comments) {
     // Let's do this!
-    //
-    console.log("ADDING COMMENTS", comments);
-
     var paragraph_lookup = {};
 
     function populate_paragraphs(n) {
@@ -33,7 +29,6 @@ module.exports = {
     }
 
     _.each(comments, function(comment) {
-      console.log("COMMENT", comment);
       var first_words = comment.paragraph.substr(0, size);
       var p = paragraph_lookup[first_words];
 

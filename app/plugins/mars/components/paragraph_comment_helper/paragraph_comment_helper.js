@@ -29,8 +29,8 @@ module.exports = {
         "text-align" : "center",
         "border" : "2px dotted white",
         "color": "#fff",
-        "width" : "10px",
-        "height" : "10px"
+        "width" : "25px",
+        "height" : "25px"
       });
     toggler.html("+");
 
