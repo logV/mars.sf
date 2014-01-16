@@ -118,6 +118,7 @@ module.exports = {
   is_package: true,
 
   get_index: function() {
+    this.set_fullscreen(true);
     template.add_stylesheet("blog.css");
 
     if (BLOG_FILES) {
@@ -166,6 +167,7 @@ module.exports = {
   },
 
   get_comments: function(ctx) {
+    this.set_fullscreen(true);
     template.add_stylesheet("blog.css");
     var filename = ctx.req.params.id;
 
@@ -194,6 +196,7 @@ module.exports = {
   },
 
   get_read: function(ctx) {
+    this.set_fullscreen(true);
     // TODO: make sure filename is only a basepath
     // ../../../etc/passwd
     var filename = ctx.req.params.id;
