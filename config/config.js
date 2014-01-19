@@ -14,5 +14,5 @@ module.exports = {
   max_http_sockets: 1000,
   max_https_sockets: 1000,
   require_https: true,
-  skip_cls: true
+  use_cls: true
 };

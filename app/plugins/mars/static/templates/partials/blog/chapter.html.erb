@@ -1,4 +1,5 @@
 <% set_default("rendered", "") %>
+<% set_default("show_footer_paging", false) %>
 
 <div class="container-fluid">
   <div class="row-fluid contents col-md-8">
@@ -10,9 +11,11 @@
       <%= rendered %>
     </div>
 
-    <div class="mbl clearfix ptl">
-      <%= render_chapter_links() %>
-    </div>
+    <% if (show_footer_paging) { %>
+      <div class="mbl clearfix ptl">
+        <%= render_chapter_links() %>
+      </div>
+    <% } %>
   </div>
 
 </div>

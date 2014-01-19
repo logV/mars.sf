@@ -139,7 +139,6 @@ module.exports = {
     var async_work = api.page.async(function(flush) { 
       var grouped_comments, comments;
       var after = _.after(2, context.wrap(function() {
-        context.set(ctx);
         // Load all the comments from the db
         var template_str = template.partial("blog/admin.html.erb", { 
           files: BLOG_FILES,
