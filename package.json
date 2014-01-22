@@ -7,7 +7,8 @@
     "superfluous": "",
     "marked": "x",
     "orm": "x",
-    "cheerio": "x"
+    "cheerio": "x",
+    "nodemailer" : "x"
   },
   "scripts": {
     "test": "bash scripts/run_tests.sh",

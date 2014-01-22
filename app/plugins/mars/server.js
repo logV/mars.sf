@@ -17,6 +17,9 @@ var BLOG_PATH = config.blog_root;
 var BLOG_FILES = null;
 var value_of = require_core("server/controller").value_of;
 
+var mail = require("nodemailer").mail;
+
+
 function load_blog_files(cb) {
   fs.readdir(BLOG_PATH, function(err, files) {
     if (!err) {
@@ -228,8 +231,28 @@ module.exports = {
       } else {
         console.log("Adding comment", comment_data);
 
-        models.comment.create([comment_data], function(err, result) { 
+        models.comment.create([comment_data], function(err) { 
           cb("comment_added"); 
+
+          if (!err && config.email_comments_to && config.email_from) {
+            var author = comment_data.author || "anon";
+            var text = "From: " + author + "\n\n Context: " +
+              comment_data.paragraph + "\n\nText: " + comment_data.comment;
+            var html_text = text.replace(/\n/g, "<br />");
+            var subject = "You've received a new comment on " + comment_data.page;
+
+            mail({
+              from: config.email_from,
+              
+              to: config.email_comments_to.join(','), // list of receivers
+              subject: subject, // plaintext body
+              text: text,
+              html: html_text
+            });
+          }
+
+
+          
         });
       }
     });
